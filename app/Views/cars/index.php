@@ -1,7 +1,3 @@
-<?php
-
-echo "Hello world from Home.php";
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +7,6 @@ echo "Hello world from Home.php";
 <body>
     <div class="container mt-5">
         <h1>Cars</h1>
-        <?php session()->getFlashdata('message'); ?>
         <?php if(session()->getFlashdata('message')): ?>
             <div class="alert alert-success"><?= session()->getFlashdata('message') ?></div>
         <?php endif; ?>
@@ -29,9 +24,7 @@ echo "Hello world from Home.php";
                 </tr>
             </thead>
             <tbody>
-                <?php
-                if(isset($cars)){
-                 foreach($cars as $car): ?>
+                <?php foreach($cars as $car): ?>
                     <tr>
                         <td><?= esc($car['car_id']) ?></td>
                         <td><?= esc($car['make']) ?></td>
@@ -41,9 +34,7 @@ echo "Hello world from Home.php";
                             <a href="<?= site_url('cars/'.$car['car_id'].'/quotes') ?>" class="btn btn-primary">View Quotes</a>
                         </td>
                     </tr>
-                <?php endforeach; 
-                }
-                ?>
+                <?php endforeach; ?>
             </tbody>
         </table>
         <a href="<?= site_url('fetch-cars') ?>" class="btn btn-success">Fetch Cars</a>
