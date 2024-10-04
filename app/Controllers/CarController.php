@@ -67,11 +67,10 @@ class CarController extends Controller {
           //   // $this->carModel->insert($carData );
           //   $this->carModel->set($carData);
           // }
-          if (empty($existingCar)){
           $this->carModel->insert(
             // ['vin' => $car['vin']],
             $carData
-          );}
+          );
         
         }
         return redirect()->to('/cars')->with('message','Cars data fetch and saved successfully!');
