@@ -15,6 +15,12 @@ class CarController extends Controller {
     $this->quoteModel = new QuoteModel();
   }
 
+  public function about(){
+    $this->fetchCars();
+    $data['cars'] = $this->carModel->findAll();
+    return view('about', );
+  }
+
   public function fetchCars(){
     $apiUrl = 'https://app.dev.aws.dinggo.com.au/phptest/cars';
 
@@ -61,19 +67,21 @@ class CarController extends Controller {
           // Check if VIN already exists
            $existingCar = $this->carModel->where('vin', $car['vin'])->first();
 
-          // if ($existingCar){
-          //   $this->carModel->update($existingCar['vin'], $carData);
-          // } else {
-          //   // $this->carModel->insert($carData );
-          //   $this->carModel->set($carData);
-          // }
-          $this->carModel->insert(
-            // ['vin' => $car['vin']],
-            $carData
-          );
+          if ($existingCar){
+            $this->carModel->update($existingCar['id'], $carData);
+          } else {
+            // $this->carModel->insert($carData );
+            $this->carModel->set($carData);
+          }
+          // $this->carModel->insert(
+          //   // ['vin' => $car['vin']],
+          //   $carData
+          // );
         
         }
-        return redirect()->to('/cars')->with('message','Cars data fetch and saved successfully!');
+        return redirect()->to('/about')
+          ->with('message','Cars data fetch and saved successfully!')
+          ->with('data', $data['cars']);
       } else {
         $errorMessage = $data['message'] ?? 'Unknown error occurred';
         return redirect()->back()->with('error', $errorMessage);
@@ -87,7 +95,7 @@ class CarController extends Controller {
   // Display cars
   public function index(){
     $data['cars'] = $this->carModel->findAll();
-    return view('cars/index', $data);
+    return view('/app/Views/cars/index.php', $data);
   }
 
   // Display quotes
