@@ -124,3 +124,7 @@ nb-configuration.xml
 
 /results/
 /phpunit*.xml
+
+# API CREDS
+USERNAME=shreejairaj@gmail.com 
+KEY=shreejairaj
