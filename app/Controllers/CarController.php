@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\CarModel;
 use App\Models\QuoteModel;
 use CodeIgniter\Controller;
+use PhpParser\Node\Stmt\TryCatch;
 
 class CarController extends Controller {
   protected $carModel;
@@ -18,7 +19,58 @@ class CarController extends Controller {
   public function about(){
     $this->fetchCars();
     $data['cars'] = $this->carModel->findAll();
-    return view('about', );
+    return view('about', ['data'=>$data['cars']]);
+  }
+
+  public function fetchQuotes(){
+    $apiUrl = 'https://app.dev.aws.dinggo.com.au/phptest/quotes';
+
+    $licensePlate = $this->request->getVar('licensePlate');
+    $licenseState = $this->request->getVar('licenseState');
+
+    $creds = [
+      'username' => 'shreejairaj@gmail.com',
+      'key' => 'shreejairaj',
+      'licensePlate' =>  $licensePlate,
+      'licenseState' => $licenseState
+    ];
+
+    $client = \Config\Services::curlrequest();
+
+    try{
+      $response = $client->post($apiUrl, [
+        'json' => $creds,
+        'headers' => [
+          'Accept' => 'application/json',
+        ],
+        'timeout' => 30 
+      ]);
+
+      if ($response->getStatusCode() !== 200){
+        return redirect()->back()->with('error', 'Failed to fetch data fromn API');
+      }
+
+      $data = json_decode($response->getBody(), true);
+
+      if(isset($data['success']) && $data['success'] === 'ok' && isset($data['quotes'])){
+        foreach ($data['quotes'] as $quote){
+          $quoteData = (object) [
+            'quote_amount' => $quote['price'] ?? null,
+            'quote_description' => $quote['overviewOfWork'] ?? null,
+          ];
+
+          $this->quoteModel->set($quoteData);
+        }
+        return redirect()->to('/quotes')
+          ->with('message','Cars data fetch and saved successfully!')
+          ->with('data', $data['quotes']);
+      }
+
+      
+
+    }catch(\Exception $e){
+      return redirect()->back()->with('error', 'An error occurred: '.$e->getMessage());
+    }
   }
 
   public function fetchCars(){
@@ -28,6 +80,7 @@ class CarController extends Controller {
       'username' => 'shreejairaj@gmail.com',
       'key' => 'shreejairaj'
     ];
+    
 
     $client = \Config\Services::curlrequest();
 
@@ -70,13 +123,9 @@ class CarController extends Controller {
           if ($existingCar){
             $this->carModel->update($existingCar['id'], $carData);
           } else {
-            // $this->carModel->insert($carData );
             $this->carModel->set($carData);
           }
-          // $this->carModel->insert(
-          //   // ['vin' => $car['vin']],
-          //   $carData
-          // );
+
         
         }
         return redirect()->to('/about')
@@ -95,7 +144,8 @@ class CarController extends Controller {
   // Display cars
   public function index(){
     $data['cars'] = $this->carModel->findAll();
-    return view('/app/Views/cars/index.php', $data);
+    // return view('/app/Views/cars/index.php', $data);
+    return view('/home', ['data'=> 'HiIII']);
   }
 
   // Display quotes

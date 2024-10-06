@@ -30,6 +30,7 @@ echo "Hello world from Home.php";
             </thead>
             <tbody>
                 <?php
+                var_dump(session()->getFlashdata('data'));
                 if(isset($cars)){
                  foreach($cars as $car): ?>
                     <tr>
@@ -46,7 +47,7 @@ echo "Hello world from Home.php";
                 ?>
             </tbody>
         </table>
-        <a href="<?= site_url('fetch-cars') ?>" class="btn btn-success">Fetch Cars</a>
+        <a href="<?= site_url('/car/fetchCars') ?>" class="btn btn-success">Fetch Cars</a>
         <a href="<?= site_url('fetch-quotes') ?>" class="btn btn-info">Fetch Quotes</a>
     </div>
 </body>

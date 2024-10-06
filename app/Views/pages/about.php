@@ -5,11 +5,12 @@ namespace App\Controllers;
 echo "Hello world from about.php";
 
 use CodeIgniter\Controller;
+
         
 if (session()->getFlashdata('message')): ?>
  <div class="alert alert-success">
    <?= session()->getFlashdata('message') ?>
-   <? var_dump(session()->get('data')); ?>
+   <? //var_dump(session()->get('data')); ?>
  </div>
 <?php endif; ?>
 
@@ -20,7 +21,7 @@ if (session()->getFlashdata('message')): ?>
 ?>
 
 <?php if(session()->getFlashdata('error')): ?>
-    <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
+    <div class="alert alert-danger"><?php //session()->getFlashdata('error') ?></div>
 <?php endif; ?>
 
 <?php if(!empty($cars)): ?>
@@ -31,6 +32,8 @@ if (session()->getFlashdata('message')): ?>
                     <th>Make</th>
                     <th>Model</th>
                     <th>Year</th>
+                    <th>License Plate</th>
+                    <th>License State</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -41,8 +44,11 @@ if (session()->getFlashdata('message')): ?>
                         <td><?= esc($car['make']) ?></td>
                         <td><?= esc($car['model']) ?></td>
                         <td><?= esc($car['year']) ?></td>
+                        <td><?= esc($car['licensePlate']) ?></td>
+                        <td><?= esc($car['licenseState']) ?></td>
                         <td>
-                            <a href="<?= site_url('cars/'.$car['vin'].'/quotes') ?>" class="btn btn-primary">View Quotes</a>
+                            <!-- <a href="<?php //site_url('cars/'.$car['vin'].'/quotes') ?>" class="btn btn-primary">View Quotes</a> -->
+                            <a href="<?= site_url('/car/fetchQuotes').'?licensePlate='.urlencode($car['licensePlate']). '&licenseState=' . urlencode($car['licenseState']) ?>">View quotes</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
