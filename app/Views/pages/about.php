@@ -1,16 +1,10 @@
 <?php
 
 namespace App\Controllers;
-
-echo "Hello world from about.php";
-
-use CodeIgniter\Controller;
-
         
 if (session()->getFlashdata('message')): ?>
  <div class="alert alert-success">
    <?= session()->getFlashdata('message') ?>
-   <? //var_dump(session()->get('data')); ?>
  </div>
 <?php endif; ?>
 
@@ -21,7 +15,7 @@ if (session()->getFlashdata('message')): ?>
 ?>
 
 <?php if(session()->getFlashdata('error')): ?>
-    <div class="alert alert-danger"><?php //session()->getFlashdata('error') ?></div>
+    <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
 <?php endif; ?>
 
 <?php if(!empty($cars)): ?>
@@ -47,13 +41,14 @@ if (session()->getFlashdata('message')): ?>
                         <td><?= esc($car['licensePlate']) ?></td>
                         <td><?= esc($car['licenseState']) ?></td>
                         <td>
-                            <!-- <a href="<?php //site_url('cars/'.$car['vin'].'/quotes') ?>" class="btn btn-primary">View Quotes</a> -->
-                            <a href="<?= site_url('/car/fetchQuotes').'?licensePlate='.urlencode($car['licensePlate']). '&licenseState=' . urlencode($car['licenseState']) ?>">View quotes</a>
+                            <a href="<?= site_url('/car/fetchQuotes').'?licensePlate='.urlencode($car['licensePlate']). '&licenseState=' . urlencode($car['licenseState']) ?>" class="btn btn-primary">View quotes</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
-<?php else: ?>
-<p>No cars found.</p>
+<?php else: 
+    header("Location: /");
+    exit();
+?>
 <?php endif; ?>

@@ -57,12 +57,17 @@ class CarController extends Controller {
           $quoteData = (object) [
             'quote_amount' => $quote['price'] ?? null,
             'quote_description' => $quote['overviewOfWork'] ?? null,
+            'license_plate' => $licensePlate,
+            'repairer' => $quote['repairer'],
+            'quote_id' => $licensePlate.str_replace(' ','', $quote['repairer']).strval(date('Y-m-dH:i:s')),
+            'created_at'    => (string) date('Y-m-d H:i:s'),
           ];
 
-          $this->quoteModel->set($quoteData);
+            $this->quoteModel->insert($quoteData);
+          
         }
         return redirect()->to('/quotes')
-          ->with('message','Cars data fetch and saved successfully!')
+          ->with('message','Quotes data fetch and saved successfully!')
           ->with('data', $data['quotes']);
       }
 

@@ -7,5 +7,6 @@
   </head>
   
   <body>
+    <div class="container mt-5">
     <h1><?= esc($title) ?></h1>
   

@@ -4,15 +4,13 @@ namespace App\Controllers;
        
 if (session()->getFlashdata('message')): ?>
  <div class="alert alert-success">
-   <?= session()->getFlashdata('message') ?>
-   <? //var_dump(session()->get('data')); ?>
+   <?php echo session()->getFlashdata('message') ?>
  </div>
 <?php endif; ?>
 
 <?php 
   if(session()->getFlashdata('data')):
     $quotes = session()->getFlashdata('data');
-    //var_dump($quotes);
   endif;
 ?>
 
@@ -37,6 +35,8 @@ if (session()->getFlashdata('message')): ?>
                 <?php endforeach; ?>
             </tbody>
         </table>
-<?php else: ?>
-<p>No quotes to show</p>
+<?php else: 
+    header("Location: /");
+    exit();
+?>
 <?php endif; ?>
